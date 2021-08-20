@@ -196,13 +196,13 @@ func getSegName(fd *ast.FuncDecl) string {
 	if fd.Recv != nil && len(fd.Recv.List) > 0 {
 		if rn, ok := fd.Recv.List[0].Type.(*ast.StarExpr); ok {
 			if idt, ok := rn.X.(*ast.Ident); ok {
-				prefix = toSnake(idt.Name)
+				prefix = toName(idt.Name)
 			}
 		} else if idt, ok := fd.Recv.List[0].Type.(*ast.Ident); ok {
-			prefix = toSnake(idt.Name)
+			prefix = toName(idt.Name)
 		}
 	}
-	sn := toSnake(fd.Name.Name)
+	sn := toName(fd.Name.Name)
 	if len(prefix) != 0 {
 		sn = prefix + "_" + sn
 	}
@@ -217,6 +217,10 @@ func toSnake(n string) string {
 	snake := matchFirstCap.ReplaceAllString(n, "${1}_${2}")
 	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
 	return strings.ToLower(snake)
+}
+
+func toName(n string) string {
+	return n
 }
 
 const (
